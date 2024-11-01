@@ -1,4 +1,5 @@
 import accountApiRequest from "@/apiRequests/account";
+import Profile from "@/app/me/profile";
 import envConfig from "@/config";
 import { cookies } from "next/headers";
 
@@ -12,6 +13,7 @@ export default async function MeProfile() {
         <div>
             XIn chao name
             {result?.payload?.data?.name}
+            {/* <Profile /> */}
         </div>
     )
 }
