@@ -8,6 +8,11 @@ const Header = () => {
         <div>
             <ul>
                 <li>
+                    <Link href={'/products/add'}>
+                        Them san pham
+                    </Link>
+                </li>
+                <li>
                     <Link href={'/login'}>
                         Dang nhap
                     </Link>

@@ -46,13 +46,14 @@ const RegisterForm = () => {
         try {
             const result = await authApiRequest.register(values)
 
-            console.log('result register', result)
+            await authApiRequest.auth({
+                sessionToken: result.payload.data.token,
+                expiresAt: result.payload.data.expiresAt
+            })
 
             toast({
                 description: result.payload.message
             })
-
-            await authApiRequest.auth({ sessionToken: result.payload.data.token })
 
             router.push('/me')
 

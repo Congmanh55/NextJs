@@ -18,40 +18,40 @@ import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema';
 import { useToast } from '@/hooks/use-toast';
 import authApiRequest from '@/apiRequests/auth';
 import { useRouter } from 'next/navigation';
-import { clientSessionToken } from '@/lib/http';
 import { handleErrorApi } from '@/lib/utils';
+import { AccountResType, UpdateMeBody, UpdateMeBodyType } from '@/schemaValidations/account.schema';
+import accountApiRequest from '@/apiRequests/account';
 
+type Profile = AccountResType['data']
 
-const LoginForm = () => {
+const ProfileForm = ({
+    profile
+}: {
+    profile: Profile
+}) => {
     const [loading, setLoading] = useState(false);
     const { toast } = useToast();
     const router = useRouter()
     // 1. Define your form.
-    const form = useForm<LoginBodyType>({
-        resolver: zodResolver(LoginBody),
+    const form = useForm<UpdateMeBodyType>({
+        resolver: zodResolver(UpdateMeBody),
         defaultValues: {
-            email: '',
-            password: '',
+            name: profile.name,
         },
     })
 
     // 2. Define a submit handler.
-    async function onSubmit(values: LoginBodyType) {
+    async function onSubmit(values: UpdateMeBodyType) {
         if (loading) return
         setLoading(true)
         try {
-            const result = await authApiRequest.login(values)
-
-            await authApiRequest.auth({
-                sessionToken: result.payload.data.token,
-                expiresAt: result.payload.data.expiresAt
-            })
+            const result = await accountApiRequest.updateMe(values)
 
             toast({
                 description: result.payload.message
             })
 
-            router.push('/me')
+            router.refresh()
 
         } catch (error: any) {
             handleErrorApi({
@@ -66,36 +66,29 @@ const LoginForm = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 max-w-[600px] flex-shrink-0 w-full" noValidate>
+
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                    <Input placeholder="shadcn" type='email' value={profile.email} readOnly />
+                </FormControl>
+                <FormMessage />
+
                 <FormField
                     control={form.control}
-                    name="email"
+                    name='name'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>Name:</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" type='email' {...field} />
+                                <Input placeholder='name' type='text' {...field} />
                             </FormControl>
-                            <FormMessage />
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Mat khau</FormLabel>
-                            <FormControl>
-                                <Input placeholder="shadcn" type='password' {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit" className='!mt-8 w-full'>Dang nhap</Button>
+                <Button type="submit" className='!mt-8 w-full'>Cap nhat</Button>
             </form>
         </Form>
     );
 }
 
-export default LoginForm;
+export default ProfileForm;
