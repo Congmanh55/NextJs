@@ -1,12 +1,14 @@
 'use client'
 
 import authApiRequest from '@/apiRequests/auth'
+import { useAppContext } from '@/app/app-provider'
 import { Button } from '@/components/ui/button'
 import { handleErrorApi } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const ButtonLogout = () => {
+    const { user } = useAppContext()
     const router = useRouter()
 
     const handleLogout = async () => {
@@ -17,6 +19,8 @@ const ButtonLogout = () => {
             handleErrorApi({
                 error
             })
+        } finally {
+            router.refresh()
         }
     }
 

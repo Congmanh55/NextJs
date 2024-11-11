@@ -51,7 +51,8 @@ const LoginForm = () => {
                 description: result.payload.message
             })
 
-            router.push('/me')
+            router.push('/')
+            router.refresh()
 
         } catch (error: any) {
             handleErrorApi({

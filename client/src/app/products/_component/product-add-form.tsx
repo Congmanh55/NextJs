@@ -65,6 +65,7 @@ const ProductAddForm = ({
             })
 
             router.push('/products')
+            router.refresh()
 
         } catch (error: any) {
             handleErrorApi({

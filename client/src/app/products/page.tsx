@@ -1,22 +1,31 @@
 import productApiRequest from '@/apiRequests/product'
+import DeleteProduct from '@/app/products/_component/delete-product'
 import { Button } from '@/components/ui/button'
+import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
 const ProductPageList = async () => {
+    const cookieStore = await cookies()
+    const sessionToken = cookieStore.get('sessionToken')
+    const isAuthenticated = Boolean(sessionToken)
     const { payload } = await productApiRequest.getList()
     const productList = payload.data
     return (
         <div className='space-y-3'>
             <h1>Product List</h1>
-            <Link href={'/products/add'}>
-                <Button variant={'secondary'}>Them San pham</Button>
-            </Link>
+            {isAuthenticated && (
+                <Link href={'/products/add'}>
+                    <Button variant={'secondary'}>Them San pham</Button>
+                </Link>
+            )}
+
             <div className='space-y-5'>
                 {productList.map((product: any) => (
                     <div key={product.id} className='flex space-x-4'>
-                        <div>
+                        {/* <div> */}
+                        <Link href={`/products/${product.id}`}>
                             <Image
                                 src={product.image}
                                 alt={product.name}
@@ -24,15 +33,20 @@ const ProductPageList = async () => {
                                 height={180}
                                 className='w-32 h-32 object-cover'
                             />
-                            <h3>{product.name}</h3>
-                            <div>{product.price}</div>
-                            <div className='flex space-x-2'>
-                                <Link href={`/products/${product.id}`}>
-                                    <Button>Edit</Button>
+                        </Link>
+
+                        <h3>{product.name}</h3>
+                        <div>{product.price}</div>
+                        {isAuthenticated && (
+                            <div className='flex space-x-2 items-start'>
+                                <Link href={`/products/${product.id}/edit`}>
+                                    <Button variant={'outline'}>Edit</Button>
                                 </Link>
-                                <Button variant={'destructive'}>Delete</Button>
+                                <DeleteProduct product={product} />
                             </div>
-                        </div>
+                        )}
+
+                        {/* </div> */}
                     </div>
                 ))}
             </div>

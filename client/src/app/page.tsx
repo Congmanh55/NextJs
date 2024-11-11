@@ -1,17 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Trang chu Productic'
+}
 
 export default function Home() {
   return (
     <main>
-      <ul>
-        <li>
-          <Link href={'/login'}>Login</Link>
-        </li>
-        <li>
-          <Link href={'/register'}>Register</Link>
-        </li>
-      </ul>
+      Xin chao
     </main>
   );
 }
