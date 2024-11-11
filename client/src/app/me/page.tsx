@@ -1,8 +1,12 @@
 import accountApiRequest from "@/apiRequests/account";
-import Profile from "@/app/me/profile";
 import ProfileForm from "@/app/me/profile-form";
-import envConfig from "@/config";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
+
+export const metadata: Metadata = {
+    title: 'Ho so nguoi dung'
+};
+
 
 export default async function MeProfile() {
     const cookieStore = await cookies()
@@ -13,7 +17,7 @@ export default async function MeProfile() {
 
     return (
         <div>
-            XIn chao name
+            Xin chao name
             <ProfileForm profile={result.payload.data} />
         </div>
     )

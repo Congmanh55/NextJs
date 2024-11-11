@@ -9,12 +9,17 @@ import { cookies } from "next/headers";
 import SlideSession from "@/components/slide-session";
 import accountApiRequest from "@/apiRequests/account";
 import { AccountResType } from "@/schemaValidations/account.schema";
+import { baseOpenGraph } from "@/app/shared-metadata";
 
 const inter = Inter({ subsets: ['vietnamese'] });
 
 export const metadata: Metadata = {
-  title: "Web cua See_M",
-  description: "Duoc tao boi Cong Manh",
+  title: {
+    template: '%s | Productic',
+    default: 'Productic'
+  },
+  description: 'Duoc tao boi Cong Manh',
+  openGraph: baseOpenGraph
 };
 
 export default async function RootLayout({
